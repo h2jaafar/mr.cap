@@ -373,26 +373,6 @@ public:
                 ImGui::PushItemWidth(ImGui::GetFontSize() * -20);
 
 
-                // Position Presets Integration
-                const char *currentPresetName = (currentPreset == -1) ? "<choose one>" : positionPresets[currentPreset].name.c_str();
-                if (ImGui::BeginCombo("Position Presets", currentPresetName)) {
-                    for (int i = 0; i < positionPresets.size(); ++i) {
-                        bool isSelected = (currentPreset == i); // Check if current item is selected
-                        if (ImGui::Selectable(positionPresets[i].name.c_str(), isSelected)) {
-                            currentPreset = i;
-                            ref_traj_start_pos[0] = positionPresets[i].startX;
-                            ref_traj_start_pos[1] = positionPresets[i].startY;
-                            ref_traj_start_pos[2] = positionPresets[i].startTheta;
-                            ref_traj_end_pos[0] = positionPresets[i].goalX;
-                            ref_traj_end_pos[1] = positionPresets[i].goalY;
-                            ref_traj_end_pos[2] = positionPresets[i].goalTheta;
-                        }
-                        if (isSelected) {
-                            ImGui::SetItemDefaultFocus();
-                        }
-                    }
-                    ImGui::EndCombo();
-                }
                 static int traj_type = 0;
                 if (ImGui::BeginTabBar("Trajectory Options", ImGuiTabBarFlags_None)) {
                     if (ImGui::BeginTabItem("Straight Line")) {
