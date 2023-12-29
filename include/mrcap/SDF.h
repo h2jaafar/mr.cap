@@ -21,8 +21,6 @@ struct SDF_s {
     double sys_radius_safety_radius; // system radius - safety radius
     double sys_radius_safety_radius_squared; // system radius - safety radius squared
     double inv_sys_radius_safety_radius;
-    int size; // size of the sdf
-    double resolution; // resolution of the sdf
 };
 
 

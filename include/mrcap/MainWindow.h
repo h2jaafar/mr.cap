@@ -36,10 +36,7 @@
 #include <string>
 #include <iostream>
 
-#include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/point.hpp"
 #include "Plotter.h"
-// #include "Animator.h"
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
@@ -57,10 +54,8 @@ public:
     float ref_traj_start_pos[3] = {0, 0, 0};
     float ref_traj_end_pos[3] = {5, 3, 0};
     std::vector<PositionPreset> positionPresets = {
-    {"presetA", 0.0f, 0.0f, 0.0f, 4.0f, 4.0f, 0.0f},
-    {"presetB", 0.0f, 0.0f, 1.54f, 4.0f, 0.0f, 1.54f},
-    {"vicon", -0.061379f, -0.049422f, 0.002159 , 0.6f, 0.0f, 0.0f},
-
+    {"presetA", 0.0f, 0.0f, 0.0f, 7.0f, 0.0f, 0.0f},
+    {"presetB", 0.0f, 0.0f, 1.54f, 5.0f, 2.0f, 1.54f},
     // Add more presets as required...
     };
 
@@ -79,11 +74,7 @@ public:
     float ref_traj_angular_freq = {M_PI};
 
     // Parameters
-    int nr_of_robots = {4};
-    int nr_of_steps = {10};
     int Ts = {8};
-    int Ts_centroid = {7};
-    int animation_step = {nr_of_steps - 1};
     double L = {0.287};
     double r = {0.0325};
     // ? Hardware
@@ -100,50 +91,14 @@ public:
     double r_2 = {0.6};
     double r_3 = {0.6};
     double r_4 = {0.6};
-    double r_5 = {0.6};
-    double r_6 = {0.6};
-    double r_7 = {0.6};
-    double r_8 = {0.6};
-    double r_9 = {0.6};
-    double r_10 = {0.6};
-    double r_11 = {0.6};
-    double r_12 = {0.6};
-    double r_13 = {0.6};
-    double r_14 = {0.6};
-    double r_15 = {0.6};
-    double r_16 = {0.6};
+   
     double theta_1 = {M_PI_4};
     double theta_2 = {3 * M_PI_4};
     double theta_3 = {5 * M_PI_4};
     double theta_4 = {7 * M_PI_4};
-    double theta_5 = {2 * M_PI_4};
-    double theta_6 = {4 * M_PI_4};
-    double theta_7 = {6 * M_PI_4};
-    double theta_8 = {8 * M_PI_4};
-    double theta_9 = {0.5 * M_PI_4};
-    double theta_10 = {1.5 * M_PI_4};
-    double theta_11 = {2.5 * M_PI_4};
-    double theta_12 = {3.5 * M_PI_4};
-    double theta_13 = {4.5 * M_PI_4};
-    double theta_14 = {5.5 * M_PI_4};
-    double theta_15 = {6.5 * M_PI_4};
-    double theta_16 = {7.5 * M_PI_4};
 
-    // double wheel_speed_limit = {1.0}; // rad/s
-    double wheel_speed_limit = {0.26}; // rad/s
-    double nominal_reference_speed = {0.2};
-    double geometry_tol = {1.0};
-    double centroid_rot_threshold = {10};
-    double robot_rot_threshold = {3};
-    double error_scale_ternary = {1.0};
-    // double proportional_gain = {1};
-    double pid_error_threshold = {0.03};
-    // double proportional_gain = {2.0}; // for gazebo sim
 
-    double proportional_gain = {1.0}; // for gazebo sim
 
-    double integral_gain = {1};
-    double derivative_gain = {1};
     int nr_of_obstacles = {5};
 
     // obstacle avoidance
@@ -165,9 +120,6 @@ public:
     double covariance_U[2] = {covariancePresets[0].covU[0], covariancePresets[0].covU[1]};
     Optimization_parameter optimization_parameter;
     Geometry_information geometry_information;
-    bool use_numerical_jacobian = {true};
-    bool use_gazebo = {false};
-    bool save_traj_ = {false};
     // int velocity_step;
     int disturbance_pose = 3;
     int disturbance_axis = 0;
@@ -179,19 +131,12 @@ public:
     const char* label_format = "%.1f";
     MainWindow() {
 
-        // init sdf_s.obstacles with size nr_of_obstacles
         sdf_s.obstacles.reserve(nr_of_obstacles);
-        // sdf_s.obstacles.push_back(obstacle(-1, 0.5, 0));
-        // sdf_s.obstacles.push_back(obstacle(1, -0.5, 0));
         sdf_s.obstacles.push_back(obstacle(2, -0.4, 0));
         sdf_s.obstacles.push_back(obstacle(5, 0.4, 0));
         sdf_s.obstacles.push_back(obstacle(1, 0.4, 0));
         sdf_s.obstacles.push_back(obstacle(3, -0.6, 0));
         sdf_s.obstacles.push_back(obstacle(4, 0.7, 0));
-        // sdf_s.obstacles.push_back(obstacle(3, 0.4, 0));
-        // sdf_s.obstacles.push_back(obstacle(-1, 0.4, 0));
-        // sdf_s.obstacles.push_back(obstacle(6, -0.4, 0));
-        // sdf_s.obstacles.push_back(obstacle(1.5, 0.35, 0));
         sdf_s.system_radius = 0.5;
         sdf_s.inv_system_radius = 1.0 / sdf_s.system_radius;
         sdf_s.system_radius_squared = sdf_s.system_radius * sdf_s.system_radius;
@@ -199,14 +144,33 @@ public:
         sdf_s.sys_radius_safety_radius = sdf_s.system_radius + sdf_s.safety_radius;
         sdf_s.sys_radius_safety_radius_squared = sdf_s.sys_radius_safety_radius * sdf_s.sys_radius_safety_radius;
         sdf_s.inv_sys_radius_safety_radius = 1.0 / sdf_s.sys_radius_safety_radius;
-        sdf_s.size = 1000;
-        sdf_s.resolution = 0.01;
         optimization_parameter.lambdaFactor = 10;
         optimization_parameter.lambdaInitial = 1e-5;
         optimization_parameter.lambdaUpperBound = 100000;
         optimization_parameter.lambdaLowerBound = 0.0;
         optimization_parameter.useFixedLambdaFactor = true;
         optimization_parameter.diagonalDamping = false;
+        optimization_parameter.nr_of_robots = 4;
+        optimization_parameter.centroid_rotation_threshold = 10 * M_PI/180;
+        optimization_parameter.robot_rotation_threshold = 3 * M_PI/180;
+        optimization_parameter.nr_of_steps = 10;
+        optimization_parameter.wheel_speed_limit = 0.26;
+        optimization_parameter.nominal_reference_speed = 0.2;
+        optimization_parameter.proportional_gain = 1;
+        optimization_parameter.integral_gain = 1;
+        optimization_parameter.derivative_gain = 1;
+        optimization_parameter.pid_error_threshold = 0.03;
+        optimization_parameter.run_ros_nodes = 0;
+        optimization_parameter.numerical_jacobian = 0;
+        optimization_parameter.print_fg_factors = false;
+        optimization_parameter.print_fg_initial_values = false;
+        optimization_parameter.print_fg_iterated_results = false;
+        optimization_parameter.print_ref_traj = false;
+        optimization_parameter.print_modelled_traj = false;
+        optimization_parameter.print_velocities = false;
+        optimization_parameter.error_scale_ternary = 1.0;
+        optimization_parameter.adjust_centroid_orientation = 1;
+        optimization_parameter.separation_of_action = 1;
     }
 
 private:
@@ -251,7 +215,6 @@ public:
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // Enable vsync
 
-        // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImPlot::CreateContext();
@@ -259,14 +222,10 @@ public:
         ImGuiIO &io = ImGui::GetIO();
         (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-        // Setup Dear ImGui style
         ImGui::StyleColorsDark();
         Utils::ApplyDarkTheme();
-        // ImGui::StyleColorsLight();
 
-        // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -295,36 +254,15 @@ public:
             static bool show_sdf_window = false;
             // static bool show_animation_window = false;
             static bool factor_graph_ran = false;
-            static bool run_ros_nodes = false;
             static bool show_debug_window = true;
-            static bool show_trajectory_window = true;
             static bool show_optimizer_window = true;
             static bool show_logger = true;
             static bool push_box = true;
             static bool use_sdf = false;
-            static bool separation_of_action = true;
-            static bool print_fg_factors = false;
-            static bool print_fg_initial_values = false;
-            static bool print_fg_iterated_results = false;
-            static bool print_ref_traj = false;
-            static bool print_velocities = false;
-            static bool print_modelled_traj = false;
-            static bool new_test = false;
+  
             static bool show_metrics_window = false;
-            static bool adjust_centroid_orientation = true;
             static bool use_custom_trajectory = false;
-                    // ImGui::InputDouble("lambdaFactor", &optimization_parameter.lambdaFactor);
-                    // ImGui::InputDouble("lambdaInit", &optimization_parameter.lambdaInitial)
-                    // ImGui::InputDouble("lambdaUpperBound", &optimization_parameter.lambdaUpperBound);
-                    // ImGui::InputDouble("lambdaLowerBound", &optimization_parameter.lambdaLowerBound);
-                    // ImGui::Checkbox("diagonalDamping", &optimization_parameter.diagonalDamping);
-                    // ImGui::Checkbox("useFixedLambdaFactor", &optimization_parameter.useFixedLambdaFactor);
 
-
-
-            if (show_demo_window) {
-                ImGui::ShowDemoWindow(&show_demo_window);
-            }
 
             if (show_debug_window) {
                 // Debugging Window
@@ -365,29 +303,21 @@ public:
                 
                 ImGui::InputDouble("Ternary (x_diff)", &covariance_ternary[0], 10, 100, "%.4f");
                 ImGui::InputDouble("Ternary (y_diff)", &covariance_ternary[1], 10, 100, "%.4f");
-                // ImGui::InputDouble("Ternary (theta_diff)", &covariance_ternary[2], 10, 100, "%.4f");
                 
                 ImGui::InputDouble("Obstacle D", &covariance_obs[0], 0.00001, 0.001, "%e");
 
                 ImGui::InputDouble("Anchor (x)", &covariance_priors[0], 0.00001, 0.001, "%e");
                 ImGui::InputDouble("Anchor (y)", &covariance_priors[1], 0.00001, 0.001, "%e");
                 ImGui::InputDouble("Anchor (theta)", &covariance_priors[2], 0.00001, 0.001, "%e");
-
-                // ImGui::InputDouble("Geometry (x)", &covariance_geom[0], 0.00001, 0.001, "%e");
-                // ImGui::InputDouble("Geometry (y)", &covariance_geom[1],    0.00001, 0.001, "%e");
-                // ImGui::InputDouble("Geometry (theta)", &covariance_geom[2], 0.00001, 0.001, "%e");
                 
-                ImGui::InputDouble("Ternary Scale", &error_scale_ternary, 100, 1000, "%.2f");
                 // Logger
                 ImGui::Checkbox("Show Logger", &show_logger);
-                ImGui::Checkbox("Print Factors", &print_fg_factors);
-                ImGui::Checkbox("Print Initial Values", &print_fg_initial_values);
-                ImGui::Checkbox("Print Iterated Results", &print_fg_iterated_results);
-                ImGui::Checkbox("Print Reference Trajectories", &print_ref_traj);
-                ImGui::Checkbox("Print Modelled Trajectories", &print_modelled_traj);
-                ImGui::Checkbox("Print Velocities", &print_velocities);
-                ImGui::Checkbox("Test New Functionality", &new_test);
-
+                ImGui::Checkbox("Print Factors", &optimization_parameter.print_fg_factors);
+                ImGui::Checkbox("Print Initial Values", &optimization_parameter.print_fg_initial_values);
+                ImGui::Checkbox("Print Iterated Results", &optimization_parameter.print_fg_iterated_results);
+                ImGui::Checkbox("Print Reference Trajectories", &optimization_parameter.print_ref_traj);
+                ImGui::Checkbox("Print Modelled Trajectories", &optimization_parameter.print_modelled_traj);
+                ImGui::Checkbox("Print Velocities", &optimization_parameter.print_velocities);
                 if (show_logger) {
                     logger.Draw("Application Log");
                 }
@@ -435,7 +365,8 @@ public:
                 }
             }
             ImGui::SetNextWindowSizeConstraints(ImVec2(400, 1080), ImVec2(FLT_MAX, ImGui::GetWindowHeight()));
-            static ImGuiWindowFlags flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_AlwaysAutoResize;
+            static ImGuiWindowFlags flags = ImGuiWindowFlags_MenuBar;
+            
             if (show_mrcap_main_window) {
                 ImGui::Begin("mrcap", &show_mrcap_main_window, flags);
 
@@ -490,15 +421,14 @@ public:
                     ImGui::EndTabBar();
                 }
 
-                ImGui::InputInt("Number of steps", &nr_of_steps);
+                ImGui::InputInt("Number of steps", &optimization_parameter.nr_of_steps);
                 ImGui::SameLine();
                 HelpMarker("Steps which discretize the space");
 
                 ImGui::InputInt("Time given to each step", &Ts);
+
                 ImGui::SameLine();
                 HelpMarker("Time given for each iteration");
-                ImGui::InputInt("Time given to centroid rotation", &Ts_centroid);
-
                 // Disturbance input
                 ImGui::InputInt("Disturbance at pose: ", &disturbance_pose);
                 ImGui::SameLine();
@@ -510,72 +440,29 @@ public:
                 ImGui::SameLine();
                 HelpMarker("how much the disturbance is (0.2 for example)");
 
-                ImGui::Checkbox("Enable ROS nodes as well", &run_ros_nodes);
+                ImGui::Checkbox("Enable ROS nodes as well", &optimization_parameter.run_ros_nodes);
                 ImGui::SameLine();
                 HelpMarker("Enable ROS nodes");
-                ImGui::Checkbox("Use Gazebo", &use_gazebo);
-                ImGui::Checkbox("Save_traj_for_next", &save_traj_);
-                ImGui::Checkbox("Use Numerical Jacobians", &use_numerical_jacobian);
-                ImGui::Checkbox("Pushing Box", &push_box);
-                ImGui::Checkbox("Use SDF", &use_sdf);
-                ImGui::Checkbox("Adjust Centroid Orientation", &adjust_centroid_orientation);
-                ImGui::Checkbox("Separation of Action", &separation_of_action);
-                ImGui::InputInt("Number of robots", &nr_of_robots);
-                ImGui::SameLine();
-                HelpMarker("Run factor graph with two robots");
-                ImGui::InputDouble("Centroid Rotation Threshold (deg)", &centroid_rot_threshold);
-                ImGui::InputDouble("P-gain", &proportional_gain);
-                ImGui::InputDouble("PID Error Thresh. ", &pid_error_threshold);
-                static char str0[128] = "trial_1";
-                ImGui::Text("Trial Name: ");
-                ImGui::InputText("##TrialName", str0, IM_ARRAYSIZE(str0));
-                ImGui::SameLine();
+                ImGui::Checkbox("avoid obstacles", &use_sdf);
+                ImGui::InputInt("Number of robots", &optimization_parameter.nr_of_robots);
+                ImGui::InputDouble("Centroid Rotation Threshold (deg)", &optimization_parameter.centroid_rotation_threshold);
 
                 // geometry information
                 geometry_information.robot_wheel_radius = r;
                 geometry_information.robot_width = L;
-                geometry_information.geometry_tolerance = geometry_tol;
-                // geometry_information.distance_to_robot = {r_1, r_2, r_3, r_4, r_1, r_2, r_3, r_4, r_1, r_2, r_3, r_4, r_1, r_2, r_3, r_4};
-                // geometry_information.angle_to_robot = {theta_1, theta_2, theta_3, theta_4, 1.2, 1.5, 1.9, 3.2, 3.8, 3.5};
                 geometry_information.max_velocity = 0.25;
                 // optimization parameteres
-                optimization_parameter.nr_of_robots = nr_of_robots;
                 optimization_parameter.time_for_robot_rotation = Ts;
                 optimization_parameter.time_for_translation = Ts;
-                optimization_parameter.time_for_centroid_rotation = Ts_centroid;
-                optimization_parameter.centroid_rotation_threshold = centroid_rot_threshold * M_PI/180;
-                optimization_parameter.robot_rotation_threshold = robot_rot_threshold * M_PI/180;
-                optimization_parameter.nr_of_steps = nr_of_steps;
-                optimization_parameter.wheel_speed_limit = wheel_speed_limit;
-                optimization_parameter.nominal_reference_speed = nominal_reference_speed;
-                optimization_parameter.proportional_gain = proportional_gain;
-                optimization_parameter.derivative_gain = derivative_gain;
-                optimization_parameter.pid_error_threshold = pid_error_threshold;
-                optimization_parameter.run_ros_nodes = run_ros_nodes;
-                optimization_parameter.numerical_jacobian = use_numerical_jacobian;
-                optimization_parameter.push_box = push_box;
-                optimization_parameter.separation_of_action = separation_of_action;
+                optimization_parameter.time_for_centroid_rotation = Ts;
                 optimization_parameter.obstacle_avoidance = use_sdf;
-                optimization_parameter.adjust_centroid_orientation = adjust_centroid_orientation;
                 optimization_parameter.use_custom_trajectory = use_custom_trajectory;
-                optimization_parameter.test = new_test;
-                optimization_parameter.gazebo = use_gazebo; 
-                optimization_parameter.save_traj_ = save_traj_;
-                optimization_parameter.print_fg_factors = print_fg_factors;
-                optimization_parameter.print_fg_initial_values = print_fg_initial_values;
-                optimization_parameter.print_fg_iterated_results = print_fg_iterated_results;
-                optimization_parameter.print_ref_traj = print_ref_traj;
-                optimization_parameter.print_modelled_traj = print_modelled_traj;
-                optimization_parameter.print_velocities = print_velocities;
-                optimization_parameter.error_scale_ternary = error_scale_ternary;
+
                 optimization_parameter.collision_flag = 0;
 
                 for (int i = 0; i <= 20; i++) {
                     optimization_parameter.custom_reference_trajectory[i] = custom_reference_trajectory[i];
                 }
-
-                // print options
-                // std::vector<int> print_options = {print_fg_factors, print_fg_initial_values, print_fg_iterated_results, print_ref_traj, print_modelled_traj, print_velocities};
 
                 if (ImGui::Button("Run Factorgraph") || ImGui::IsKeyPressed(ImGuiKey_R)) {
                     Utils::Disturbance disturbance = {disturbance_pose, disturbance_axis, disturbance_value};
@@ -606,11 +493,6 @@ public:
                     covariance_information.push_back(covariance_obs_vector);
                     covariance_information.push_back(covariance_priors_vector);
 
-                    // sdf.signedDistanceField = createSignedDistanceFieldMatrix(0, 0, sdf.x_obs, sdf.y_obs, sdf.r_obs, sdf.epsilon, sdf.gridResolution, sdf.gridRange, sdf.obs_scale_factor);
-                    // computeSDFGradient(sdf);
-                    // visualization_sdf.signedDistanceField = sdf.signedDistanceField.rowwise().reverse().eval();
-                    optimization_parameter.nr_of_robots = nr_of_robots;
-
                     std::vector<double> radiuses;
                     std::vector<double> thetas;
                     for(int i = 0; i < optimization_parameter.nr_of_robots; i++){
@@ -628,12 +510,6 @@ public:
                     geometry_information.angle_to_robot = thetas;
 
                     auto returned_info = PointMotion(optimization_parameter, geometry_information, covariance_information, disturbance, solver_parameters, sdf_s);
-
-                    // while (optimization_parameter.collision_flag) {
-                    //     covariance_information[3].x() -= 0.01 * (covariance_information[3].x());
-                    //     returned_info = PointMotion(optimization_parameter, geometry_information, covariance_information, disturbance, solver_parameters, sdf_s);
-                    //     std::cout << "latest obstacle covariance2: " << covariance_information[3].x() << std::endl;
-                    // }
 
                     robots = returned_info.first;
                     centroid = returned_info.second;
@@ -666,15 +542,13 @@ public:
                         ImGui::InputDouble(labelX.c_str(), &sdf_s.obstacles[i].x);
                         ImGui::InputDouble(labelY.c_str(), &sdf_s.obstacles[i].y);
                     }
-                    // system radius
                     ImGui::InputDouble("System Radius", &sdf_s.system_radius);
-                    ImGui::InputDouble("safety_radius", &sdf_s.safety_radius);
+                    ImGui::InputDouble("Safety Radius", &sdf_s.safety_radius);
                     ImGui::End();
                 }
 
                 ImGui::PopItemWidth();
                 ImGui::End();
-                // ImGui::PopStyleVar(2);s
             }
 
             ImGui::Render();

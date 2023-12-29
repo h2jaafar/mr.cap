@@ -48,8 +48,6 @@
 #include <string>
 #include <iostream>
 
-#include "rclcpp/rclcpp.hpp"
-
 #include <thread>
 #include <mutex>
 // Logger
@@ -119,22 +117,20 @@ std::pair<std::vector<RobotData>, CentroidData> PointMotion(Optimization_paramet
     double integral_gain = optimization_parameter.integral_gain;
     double derivative_gain = optimization_parameter.derivative_gain;
 
-    int ROS_Enabled = optimization_parameter.run_ros_nodes;
+    auto ROS_Enabled = optimization_parameter.run_ros_nodes;
     int reference_trajectory_type = optimization_parameter.reference_trajectory_type;
     int push_box = optimization_parameter.push_box;
     int separation_of_action = optimization_parameter.separation_of_action;
     int use_sdf = optimization_parameter.obstacle_avoidance;
     int adjust_centroid_orientation = optimization_parameter.adjust_centroid_orientation;
     int use_custom_trajectory = optimization_parameter.use_custom_trajectory;
-    int new_test = optimization_parameter.test;
 
-    int print_fg_factors = optimization_parameter.print_fg_factors;
-    int print_fg_initial_values = optimization_parameter.print_fg_initial_values;
-    int print_fg_iterated_results = optimization_parameter.print_fg_iterated_results;
-    int print_ref_traj = optimization_parameter.print_ref_traj;
-    int print_modelled_traj = optimization_parameter.print_modelled_traj;
-    bool use_gazebo = optimization_parameter.gazebo;
-    bool save_traj = optimization_parameter.save_traj_;
+    auto print_fg_factors = optimization_parameter.print_fg_factors;
+    auto print_fg_initial_values = optimization_parameter.print_fg_initial_values;
+    auto print_fg_iterated_results = optimization_parameter.print_fg_iterated_results;
+    auto print_ref_traj = optimization_parameter.print_ref_traj;
+    auto print_modelled_traj = optimization_parameter.print_modelled_traj;
+    auto use_gazebo = optimization_parameter.gazebo;
     gtsam::Pose2 ref_traj_end_pose = optimization_parameter.ref_traj_end_pose;
     gtsam::Pose2 ref_traj_center_of_rotation = optimization_parameter.ref_traj_center_of_rotation;
     double ref_traj_angular_frequency = optimization_parameter.ref_traj_angular_frequency;

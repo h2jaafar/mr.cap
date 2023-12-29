@@ -19,7 +19,6 @@ std::pair<gtsam::NonlinearFactorGraph, gtsam::Values> MultiRobotFG(
     gtsam::Values init_values;
     gtsam::NonlinearFactorGraph graph;
 
-    // Removed unused variables push_box, test_flag, nominal_speed_reference
     int use_sdf = optimization_parameter.obstacle_avoidance;
     auto& covariance_X = covariance_information.covariance_X;
     auto& covariance_U = covariance_information.covariance_U;

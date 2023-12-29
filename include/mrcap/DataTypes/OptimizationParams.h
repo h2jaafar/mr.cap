@@ -21,7 +21,7 @@ struct Optimization_parameter {
     double pid_error_threshold;
 
     // operating conditions
-    int run_ros_nodes;
+    bool run_ros_nodes;
     int numerical_jacobian;
     int push_box;
     int separation_of_action;
@@ -32,14 +32,13 @@ struct Optimization_parameter {
     int use_mpc;
 
     // print options
-    int print_fg_factors;
-    int print_fg_initial_values;
-    int print_fg_iterated_results;
-    int print_ref_traj;
-    int print_modelled_traj;
-    int print_velocities; 
+    bool print_fg_factors;
+    bool print_fg_initial_values;
+    bool print_fg_iterated_results;
+    bool print_ref_traj;
+    bool print_modelled_traj;
+    bool print_velocities; 
     bool gazebo;
-    bool save_traj_;
     // reference trajectory parameters
     int reference_trajectory_type;
     gtsam::Pose2 ref_traj_start_pose;
