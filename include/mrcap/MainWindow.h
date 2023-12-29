@@ -364,7 +364,7 @@ public:
                     ImGui::End();
                 }
             }
-            ImGui::SetNextWindowSizeConstraints(ImVec2(400, 1080), ImVec2(FLT_MAX, ImGui::GetWindowHeight()));
+            ImGui::SetNextWindowSizeConstraints(ImVec2(650, 650), ImVec2(FLT_MAX, ImGui::GetWindowHeight()));
             static ImGuiWindowFlags flags = ImGuiWindowFlags_MenuBar;
             
             if (show_mrcap_main_window) {
@@ -372,8 +372,6 @@ public:
 
                 ImGui::PushItemWidth(ImGui::GetFontSize() * -20);
 
-                ImGui::Checkbox("Show Demo", &show_demo_window);
-                ImGui::Checkbox("Show Debugger", &show_debug_window);
 
                 // Position Presets Integration
                 const char *currentPresetName = (currentPreset == -1) ? "<choose one>" : positionPresets[currentPreset].name.c_str();
@@ -518,9 +516,13 @@ public:
                     factor_graph_ran = true;
                 }
 
-                ImGui::Checkbox("Show Obstacle Settings", &show_sdf_window);
+                ImGui::Checkbox("Show obstacle settings", &show_sdf_window);
                 ImGui::SameLine();
-                HelpMarker("Show the signed distance field");
+                HelpMarker("Show the settings for the obstacle avoidance");
+
+                ImGui::Checkbox("Show covariance settings", &show_debug_window);
+
+
                 if (factor_graph_ran) {
                     Utils::Disturbance disturbance = {disturbance_pose, disturbance_axis, disturbance_value};
                     if (ImPlot::BeginPlot("Environment", ImVec2(500, 500))) {
