@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/h2jaafar/mr.cap">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo-white.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">MR.CAP: Multi-robot Joint Control and Planning for Object Transport</h3>
@@ -121,50 +121,106 @@ To setup the project locally, follow these simple steps. The demo will allow you
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+First, ensure that you have installed GTSAM, and it's necessary prerequisites, as well as proper linking to the library. See [GTSAM](https://gtsam.org/) for more information.
+
+First, navigate to a directory of your choice, and clone the GLEW and GTSAM repositories.
+
+```
+sudo apt-get install libglew-dev
+sudo apt-get install libglfw3-dev
+sudo apt install libxinerama-dev libxcursor-dev xinput libxi-dev 
+git clone https://github.com/glfw/glfw
+cd glfw
+cmake -G "Unix Makefiles"
+make
+sudo make install
+cd ..
+```
+
+```
+git clone https://github.com/borglab/gtsam.git
+cd gtsam
+mkdir build && cd build
+cmake -DGTSAM_ALLOW_DEPRECATED_SINCE_V42:=OFF .. # disable deprecated functionality for compatibility
+make -j4 check # optional, run unit tests  
+sudo make install
+echo 'export LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH}' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/usr/local/share:${LD_LIBRARY_PATH}' >> ~/.bashrc
+source ~/.bashrc
+```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/h2jaafar/mr.cap.git
+   git clone https:://github.com/h2jaafar/mr.cap.git
    ```
-3. Install NPM packages
+2. Build the project
    ```sh
-   npm install
+   cd mr.cap
+   mkdir build && cd build
+   cmake ..
+   make
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Run the demo
+   ```sh
+   ./mrcap_demo
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+There are three ways to use the algorithm:
+1. Pure C++ simulation (i.e non-physics based)
+2. Gazebo simulation
+3. Real robot system
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+To use the pure C++ simulation, simply run the demo as described above. This will run the algorithm on a simulated system, and launch a GUI using ImGui and ImPlot to visualize the results. 
+
+![Demo](images/demo.png)
+
+
+There are several configurable parameters in the demo. These are:
+* Number of robots
+* Number of obstacles
+* Number of steps
+* Start and goal positions of the centroid
+* Robot geometry
+* Optimization parameters
+* Covariance parameters
+* Psuedo-disturbances (for testing)
+as well as many more, found in `include/mrcap/MainWindow.h`. We have tried to make as many of these parameters as possible configurable, to allow for easy experimentation, however, some of them may require some searching in the code to find. 
+
+Some images of the demo are shown below:
+![Demo](images/demo1.png)
+![Demo](images/demo2.png)
+![Demo](images/demo3.png)
+
+
+To use the Gazebo simulation, first install Gazebo and ROS2. I highly recommend using a custom ROS2 Gazebo world for multi-robot simulation I developed alongside this project. It can be found [here](https://github.com/h2jaafar/multiple-tb3-launcher). This will allow you to easily launch multiple robots in Gazebo, and to control them using ROS2.
+
+![Gazebo](images/gazebo.png)
+
+Finally, to use the algorithm on real robot systems is simply a matter of sim2real. Simply remap the topics to the real robot topics, and you're good to go! See `include/mrcap/ROSCommunications.h` for details regarding the topics subscribed and published to.
+
+In our experimentation, we published robot velocites to `/B0n/cmd_vel` where `n` is the robot number. We used a Vicon motion capture system to obtain robot positions, and subscribe to the `/vicon/B0n/B0n` topics. You can simply substitute this with your localization stack of choice.
+
+![Real](images/real.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+- [x] Pure C++ simulation
+- [x] Gazebo simulation
+- [x] Real robot system
+- [ ] Configuration files
+- [ ] Unit tests
 
 See the [open issues](https://github.com/h2jaafar/mr.cap/issues) for a full list of proposed features (and known issues).
 
@@ -202,7 +258,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - email@torontomu.ca
+Your Name - husseinali.jaafar@torontomu.ca
 
 Project Link: [https://github.com/h2jaafar/mr.cap](https://github.com/h2jaafar/mr.cap)
 
@@ -212,10 +268,16 @@ Project Link: [https://github.com/h2jaafar/mr.cap](https://github.com/h2jaafar/m
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+Major thanks to my co-authors and supervisors for their help and support in this project. This project would not have been possible without them. Specifically Howard (Cheng-Hao) for the late nights helping debug. 
+* [Cheng-Hao Kao](https://www.linkedin.com/in/cheng-hao-kao-64343b252/)
 
-* []()
-* []()
-* []()
+GTSAM and the GTSAM team for their amazing library and support.
+
+* [GTSAM](https://gtsam.org/)
+
+And of course, ROS and ROS2 for their amazing libraries and support.
+
+* [ROS](https://www.ros.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -235,20 +297,8 @@ Project Link: [https://github.com/h2jaafar/mr.cap](https://github.com/h2jaafar/m
 [license-url]: https://github.com/h2jaafar/mr.cap/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/hussein-ali-jaafar
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[ROS2]: https://img.shields.io/badge/ROS2-22314E?style=for-the-badge&logo=ros&logoColor=white
+[GTSAM]: https://img.shields.io/badge/GTSAM-22314E?style=for-the-badge&logo=cpp&logoColor=white
+[CMake]: https://img.shields.io/badge/CMake-22314E?style=for-the-badge&logo=cmake&logoColor=white
+[Eigen]: https://img.shields.io/badge/Eigen-22314E?style=for-the-badge&logo=eigen&logoColor=white
+[Boost]: https://img.shields.io/badge/Boost-22314E?style=for-the-badge&logo=boost&logoColor=white
