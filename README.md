@@ -102,14 +102,12 @@ to fill in
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+* [![GTSAM][GTSAM]][https://gtsam.org/]
+* [![CMake][CMake]][https://cmake.org/]
+* [![Eigen][Eigen]][http://eigen.tuxfamily.org/]
+* [![Boost][Boost]][https://www.boost.org/]
+* [![ROS2][ROS2]][https://index.ros.org/doc/ros2/]
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,8 +116,8 @@ to fill in
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To setup the project locally, follow these simple steps. The demo will allow you to experiment with the algorithm and to test it on your own system.
+
 
 ### Prerequisites
 
