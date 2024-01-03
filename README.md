@@ -301,7 +301,7 @@ And of course, ROS and ROS2 for their amazing libraries and support.
 [issues-shield]: https://img.shields.io/github/issues/h2jaafar/mr.cap.svg?style=for-the-badge
 [issues-url]: https://github.com/h2jaafar/mr.cap/issues
 [license-shield]: https://img.shields.io/github/license/h2jaafar/mr.cap.svg?style=for-the-badge
-[license-url]: https://github.com/h2jaafar/mr.cap/blob/master/LICENSE.txt
+[license-url]: https://github.com/h2jaafar/mr.cap/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/hussein-ali-jaafar
 [ROS2]: https://img.shields.io/badge/ROS2-22314E?style=for-the-badge&logo=ros&logoColor=white
