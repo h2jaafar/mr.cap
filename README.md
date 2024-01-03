@@ -32,7 +32,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/h2jaafar/mr.cap">
-    <img src="images/logo-white.png" alt="Logo" width="80" height="80">
+    <img src="images/logo-white.png" alt="Logo" width="100" height="100">
   </a>
 
 <h3 align="center">MR.CAP: Multi-robot Joint Control and Planning for Object Transport</h3>
