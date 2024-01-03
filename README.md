@@ -25,7 +25,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 </div>
 
 
@@ -300,7 +299,7 @@ And of course, ROS and ROS2 for their amazing libraries and support.
 [stars-url]: https://github.com/h2jaafar/mr.cap/stargazers
 [issues-shield]: https://img.shields.io/github/issues/h2jaafar/mr.cap.svg?style=for-the-badge
 [issues-url]: https://github.com/h2jaafar/mr.cap/issues
-[license-shield]: https://img.shields.io/github/license/h2jaafar/mr.cap.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/h2jaafar/mr.cap?style=for-the-badge
 [license-url]: https://github.com/h2jaafar/mr.cap/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/hussein-ali-jaafar
