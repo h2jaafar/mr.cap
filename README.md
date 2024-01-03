@@ -290,7 +290,6 @@ And of course, ROS and ROS2 for their amazing libraries and support.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/h2jaafar/mr.cap.svg?style=for-the-badge
