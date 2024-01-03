@@ -52,7 +52,7 @@ public:
     CentroidData centroid;
 
     float ref_traj_start_pos[3] = {0, 0, 0};
-    float ref_traj_end_pos[3] = {5, 3, 0};
+    float ref_traj_end_pos[3] = {5, 0, 0};
     std::vector<PositionPreset> positionPresets = {
     {"presetA", 0.0f, 0.0f, 0.0f, 7.0f, 0.0f, 0.0f},
     {"presetB", 0.0f, 0.0f, 1.54f, 5.0f, 2.0f, 1.54f},
@@ -77,21 +77,10 @@ public:
     int Ts = {8};
     double L = {0.287};
     double r = {0.0325};
-    // ? Hardware
-    // double r_4 = {0.475362};
-    // double r_1 = {0.478292};
-    // double r_2 = {0.47928};
-    // double r_3 = {0.455582};
-    // double theta_4 = {5.31982};
-    // double theta_1 = {0.86401};
-    // double theta_2 = {2.16399};
-    // double theta_3 = {4.08139};
-    // ? Gazebo
     double r_1 = {0.6};
     double r_2 = {0.6};
     double r_3 = {0.6};
     double r_4 = {0.6};
-   
     double theta_1 = {M_PI_4};
     double theta_2 = {3 * M_PI_4};
     double theta_3 = {5 * M_PI_4};
@@ -99,7 +88,7 @@ public:
 
 
 
-    int nr_of_obstacles = {5};
+    int nr_of_obstacles = {2};
 
     // obstacle avoidance
     int currentCovPreset = 0;
@@ -107,9 +96,7 @@ public:
     Plotter plotter;
     std::vector<CovariancePreset> covariancePresets = {
     //                     Name             x0,x1,x2,t0,t1,t2,o0,o1,o2,p0,    p1,   p2,     u0,   u1   
-        CovariancePreset("2-obs", 1,1,10,0.001,0.001,1,1,0,0,0.0001,0.0001,0.001, 0.1, 0.1),     
-        CovariancePreset("Software-Trials", 1, 1, 2, 1, 1, 1, 1, 0, 0, 1e-3,  1e-3, 1.5e-1, 200 , 200),
-
+        CovariancePreset("Default", 1,1,0.2,  0.001,0.001,0, 0.1,0,0,  0.001,0.001, 0.01,   1.0, 1.0),  
         // Add more presets as required...
     };
 
@@ -133,10 +120,7 @@ public:
 
         sdf_s.obstacles.reserve(nr_of_obstacles);
         sdf_s.obstacles.push_back(obstacle(2, -0.4, 0));
-        sdf_s.obstacles.push_back(obstacle(5, 0.4, 0));
-        sdf_s.obstacles.push_back(obstacle(1, 0.4, 0));
-        sdf_s.obstacles.push_back(obstacle(3, -0.6, 0));
-        sdf_s.obstacles.push_back(obstacle(4, 0.7, 0));
+        sdf_s.obstacles.push_back(obstacle(4, 0.4, 0));
         sdf_s.system_radius = 0.5;
         sdf_s.inv_system_radius = 1.0 / sdf_s.system_radius;
         sdf_s.system_radius_squared = sdf_s.system_radius * sdf_s.system_radius;
@@ -153,7 +137,7 @@ public:
         optimization_parameter.nr_of_robots = 4;
         optimization_parameter.centroid_rotation_threshold = 10 * M_PI/180;
         optimization_parameter.robot_rotation_threshold = 3 * M_PI/180;
-        optimization_parameter.nr_of_steps = 10;
+        optimization_parameter.nr_of_steps = 20;
         optimization_parameter.wheel_speed_limit = 0.26;
         optimization_parameter.nominal_reference_speed = 0.2;
         optimization_parameter.proportional_gain = 1;
@@ -257,10 +241,7 @@ public:
             static bool show_debug_window = true;
             static bool show_optimizer_window = true;
             static bool show_logger = true;
-            static bool push_box = true;
-            static bool use_sdf = false;
-  
-            static bool show_metrics_window = false;
+            static bool use_sdf = true;
             static bool use_custom_trajectory = false;
 
 
@@ -328,6 +309,7 @@ public:
             // Optimizer Window
             if (show_optimizer_window) {
                 if (ImGui::Begin("Optimizer Window", &show_optimizer_window)) {
+                    ImGui::PushItemWidth(ImGui::GetFontSize() * 9);
                     ImGui::Text("Optimizer Options");
                     ImGui::InputDouble("Max Iterations", &solver_parameters[0]);
                     ImGui::InputDouble("Relative Error Tol", &solver_parameters[1]);
@@ -361,10 +343,10 @@ public:
                         }
                         ImGui::EndCombo();
                     }
+                    ImGui::PopItemWidth();
                     ImGui::End();
                 }
             }
-            ImGui::SetNextWindowSizeConstraints(ImVec2(650, 650), ImVec2(FLT_MAX, ImGui::GetWindowHeight()));
             static ImGuiWindowFlags flags = ImGuiWindowFlags_MenuBar;
             
             if (show_mrcap_main_window) {
@@ -411,7 +393,11 @@ public:
                 ImGui::InputInt("Disturbance at pose: ", &disturbance_pose);
                 ImGui::SameLine();
                 HelpMarker("where the disturbance occurs (pose number 10 for example)");
-                ImGui::InputInt("axis", &disturbance_axis);
+                ImGui::Text("Disturbance axis: ");
+                ImGui::SameLine();
+                ImGui::RadioButton("x", &disturbance_axis, 0);
+                ImGui::SameLine();
+                ImGui::RadioButton("y", &disturbance_axis, 1);
                 ImGui::SameLine();
                 HelpMarker("which axis the disturbance occurs on (x or y) put 0 or 1");
                 ImGui::InputDouble("Disturbance value: ", &disturbance_value);
@@ -511,22 +497,26 @@ public:
                     }
                 }
                 if (show_sdf_window) {
-                    ImGui::Begin("SDF", &show_sdf_window);
-                    ImGui::InputInt("Number of Obstacles", &nr_of_obstacles);
-
+                    ImGui::Begin("Obstacle Settings", &show_sdf_window);
+                    ImGui::PushItemWidth(ImGui::GetFontSize() * 7);
+                    ImGui::InputInt("Nr of Obstacles", &nr_of_obstacles);
                     if (nr_of_obstacles != sdf_s.obstacles.size()) {
                         sdf_s.obstacles.resize(nr_of_obstacles);
                     }
 
                     for (int i = 0; i < nr_of_obstacles; ++i) {
-                        std::string labelX = "X_obs_" + std::to_string(i + 1);
-                        std::string labelY = "Y_obs_" + std::to_string(i + 1);
-                        ImGui::InputDouble(labelX.c_str(), &sdf_s.obstacles[i].x);
-                        ImGui::InputDouble(labelY.c_str(), &sdf_s.obstacles[i].y);
+                        // fix width of imgui inputfloat 
+                        std::string labelX = "Obs " + std::to_string(i);
+                        float pos[2] = {sdf_s.obstacles[i].x, sdf_s.obstacles[i].y};
+                        ImGui::InputFloat2(labelX.c_str(), pos, "%.2f");
+                        sdf_s.obstacles[i].x = pos[0];
+                        sdf_s.obstacles[i].y = pos[1];
                     }
-                    ImGui::InputDouble("System Radius", &sdf_s.system_radius);
-                    ImGui::InputDouble("Safety Radius", &sdf_s.safety_radius);
+                    ImGui::InputDouble("System Radius", &sdf_s.system_radius, 0.0, 0.0, "%.1f");
+                    ImGui::InputDouble("Safety Radius", &sdf_s.safety_radius, 0.0, 0.0, "%.1f");
+                    ImGui::PopItemWidth();
                     ImGui::End();
+
                 }
 
                 ImGui::PopItemWidth();

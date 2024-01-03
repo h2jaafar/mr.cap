@@ -84,9 +84,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
+<p align="center">
+<img src="images/main_fig.png" alt="main-fig" width="500">
+</p>
 MR.CAP, or Multi-robot Joint Control and Planning for Object Transport, is a novel approach to solve simultaneous multi-robot control and planning problems. The algorithm is developed in C++, making use of factor graph inference and an innovative problem reduction to provide a robust, fast and scalable solution. Our approach outperforms state-of-the-art methods in terms of optimization time, scalability and robustness. The algorithm is tested in simulation and on a real robot system. The paper was accepted for publication in IEEE Control Systems Letters. See the website for more information.
 
 This repository serves to provide the robotics community for a platform to test and develop the algorithm further, as well as to provide a platform for future research in the field of multi-robot control and planning. Our code is released as open source under the MIT license. We hope that this will help to accelerate the development of multi-robot systems and to provide a platform for future research in the field of multi-robot control and planning.
@@ -181,8 +181,9 @@ There are three ways to use the algorithm:
 3. Real robot system
 
 To use the pure C++ simulation, simply run the demo as described above. This will run the algorithm on a simulated system, and launch a GUI using ImGui and ImPlot to visualize the results. 
-
-![Demo](images/demo.png)
+<p align="center">
+<img src='images/demo1.png' alt='demo' width='800'>
+</p>
 
 
 There are several configurable parameters in the demo. These are:
@@ -197,21 +198,27 @@ There are several configurable parameters in the demo. These are:
 as well as many more, found in `include/mrcap/MainWindow.h`. We have tried to make as many of these parameters as possible configurable, to allow for easy experimentation, however, some of them may require some searching in the code to find. 
 
 Some images of the demo are shown below:
-![Demo](images/demo1.png)
-![Demo](images/demo2.png)
-![Demo](images/demo3.png)
+<p align="center">
+<img src='images/demo2.png' alt='demo2' width='800'>
+<img src='images/demo3.png' alt='demo3' width='800'>
+</p>
+
 
 
 To use the Gazebo simulation, first install Gazebo and ROS2. I highly recommend using a custom ROS2 Gazebo world for multi-robot simulation I developed alongside this project. It can be found [here](https://github.com/h2jaafar/multiple-tb3-launcher). This will allow you to easily launch multiple robots in Gazebo, and to control them using ROS2.
 
-![Gazebo](images/gazebo.png)
+<p align="center">
+<img src='images/gazebo.png' alt='gazebo' width='800'>
+</p>
+
 
 Finally, to use the algorithm on real robot systems is simply a matter of sim2real. Simply remap the topics to the real robot topics, and you're good to go! See `include/mrcap/ROSCommunications.h` for details regarding the topics subscribed and published to.
 
 In our experimentation, we published robot velocites to `/B0n/cmd_vel` where `n` is the robot number. We used a Vicon motion capture system to obtain robot positions, and subscribe to the `/vicon/B0n/B0n` topics. You can simply substitute this with your localization stack of choice.
 
-![Real](images/real.jpg)
-
+<p align="center">
+<img src='images/real.jpg' alt='real' width='800'>
+</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -259,8 +266,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-
-Your Name - husseinali.jaafar@torontomu.ca
+Hussein Ali Jaafar - husseinali.jaafar@torontomu.ca
 
 Project Link: [https://github.com/h2jaafar/mr.cap](https://github.com/h2jaafar/mr.cap)
 

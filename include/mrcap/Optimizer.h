@@ -365,8 +365,8 @@ std::pair<std::vector<RobotData>, CentroidData> PointMotion(Optimization_paramet
         gtsam::Pose2 disturbance_pose;
         if ((k == disturbance_info.pose_number) && (!ROS_Enabled)) {
             if (disturbance_info.axis == 0 || disturbance_info.axis == 1) {
-                double disturbance = (disturbance_info.axis == 0) ? disturbance_info.disturbance_value : 0.5;
-                double disturbance_y = (disturbance_info.axis == 1) ? disturbance_info.disturbance_value : -0.5;
+                double disturbance = (disturbance_info.axis == 0) ? disturbance_info.disturbance_value : 0;
+                double disturbance_y = (disturbance_info.axis == 1) ? disturbance_info.disturbance_value : 0;
                 disturbance_pose = gtsam::Pose2(disturbance, disturbance_y, 0);
             }
         }
