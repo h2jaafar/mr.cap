@@ -29,7 +29,6 @@ find_package(rclcpp REQUIRED)
 find_package(gazebo_msgs)
 find_package(nav_msgs)
 find_package(visualization_msgs)
-find_package(NLopt REQUIRED)
 
 
 message(STATUS "************** \n Package Statuses \n ____________________")
@@ -72,12 +71,7 @@ if(visualization_msgs_FOUND)
   link_directories(${visualization_msgs_LIBRARY_DIRS})
 endif()
 
-if(NLopt_FOUND)
-  message(STATUS "NLopt Found")
-  # include_directories(${NLopt_INCLUDE_DIR})
-  # link_directories(${NLopt_LIBRARY_DIRS})  
 
-endif()
 
 if(GTSAM_FOUND)
   message(STATUS "GTSAM Found")
@@ -86,7 +80,7 @@ if(GTSAM_FOUND)
 
   add_library(mrcap_lib STATIC ${SRC_HEADER_LIST})
   target_include_directories(mrcap_lib PUBLIC ../include)
-  target_link_libraries(mrcap_lib PUBLIC NLopt::nlopt imgui implot gtsam ${rclcpp_LIBRARIES} ${geometry_msgs_LIBRARIES} ${gazebo_msgs_LIBRARIES} ${nav_msgs_LIBRARIES})
+  target_link_libraries(mrcap_lib PUBLIC imgui implot gtsam ${rclcpp_LIBRARIES} ${geometry_msgs_LIBRARIES} ${gazebo_msgs_LIBRARIES} ${nav_msgs_LIBRARIES})
   add_executable(mr_cap_demo main.cpp)
   target_link_libraries(mr_cap_demo PRIVATE mrcap_lib)
   
