@@ -32,7 +32,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/h2jaafar/mr.cap">
-    <img src="images/logo-white.png" alt="Logo" width="100" height="100">
+    <img src="images/logo-white1.png" alt="Logo" width="100" height="100">
   </a>
 
 <h3 align="center">MR.CAP: Multi-robot Joint Control and Planning for Object Transport</h3>
@@ -84,7 +84,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 <p align="center">
-<img src="images/main_fig.png" alt="main-fig" width="500">
+<img src="images/main_fig.jpg" alt="main-fig" width="500">
 </p>
 MR.CAP, or Multi-robot Joint Control and Planning for Object Transport, is a novel approach to solve simultaneous multi-robot control and planning problems. The algorithm is developed in C++, making use of factor graph inference and an innovative problem reduction to provide a robust, fast and scalable solution. Our approach outperforms state-of-the-art methods in terms of optimization time, scalability and robustness. The algorithm is tested in simulation and on a real robot system. The paper was accepted for publication in IEEE Control Systems Letters. See the website for more information.
 
@@ -181,7 +181,7 @@ There are three ways to use the algorithm:
 
 To use the pure C++ simulation, simply run the demo as described above. This will run the algorithm on a simulated system, and launch a GUI using ImGui and ImPlot to visualize the results. 
 <p align="center">
-<img src='images/demo1.png' alt='demo' width='800'>
+<img src='images/demo1.jpg' alt='demo' width='800'>
 </p>
 
 
@@ -198,8 +198,8 @@ as well as many more, found in `include/mrcap/MainWindow.h`. We have tried to ma
 
 Some images of the demo are shown below:
 <p align="center">
-<img src='images/demo2.png' alt='demo2' width='800'>
-<img src='images/demo3.png' alt='demo3' width='800'>
+<img src='images/demo2.jpg' alt='demo2' width='800'>
+<img src='images/demo3.jpg' alt='demo3' width='800'>
 </p>
 
 
@@ -207,7 +207,7 @@ Some images of the demo are shown below:
 To use the Gazebo simulation, first install Gazebo and ROS2. I highly recommend using a custom ROS2 Gazebo world for multi-robot simulation I developed alongside this project. It can be found [here](https://github.com/h2jaafar/multiple-tb3-launcher). This will allow you to easily launch multiple robots in Gazebo, and to control them using ROS2.
 
 <p align="center">
-<img src='images/gazebo.png' alt='gazebo' width='800'>
+<img src='images/gazebo.jpg' alt='gazebo' width='800'>
 </p>
 
 
