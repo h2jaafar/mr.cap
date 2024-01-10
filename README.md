@@ -216,7 +216,7 @@ Finally, to use the algorithm on real robot systems is simply a matter of sim2re
 In our experimentation, we published robot velocites to `/B0n/cmd_vel` where `n` is the robot number. We used a Vicon motion capture system to obtain robot positions, and subscribe to the `/vicon/B0n/B0n` topics. You can simply substitute this with your localization stack of choice.
 
 <p align="center">
-<img src='images/real.jpg' alt='real' width='800'>
+<img src='images/real1.jpg' alt='real' width='800'>
 </p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
