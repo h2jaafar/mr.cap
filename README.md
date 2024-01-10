@@ -93,8 +93,15 @@ This repository serves to provide the robotics community for a platform to test 
 If you find this project useful, please give it a star! Thanks! If you use our code, please cite our paper:
 
 ```
-to fill in
-`
+@ARTICLE{10380779,
+  author={Jaafar, Hussein Ali and Kao, Cheng-Hao and Saeedi, Sajad},
+  journal={IEEE Control Systems Letters}, 
+  title={MR.CAP: Multi-Robot Joint Control and Planning for Object Transport}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-1},
+  doi={10.1109/LCSYS.2024.3349989}}
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
