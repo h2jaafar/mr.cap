@@ -148,6 +148,7 @@ cd ..
 ```
 git clone https://github.com/borglab/gtsam.git
 cd gtsam
+git checkout 618ac28f2cc407e27e9eaf4e36ece64bc236b8e7
 mkdir build && cd build
 cmake -DGTSAM_ALLOW_DEPRECATED_SINCE_V42:=OFF .. # disable deprecated functionality for compatibility
 make -j4 check # optional, run unit tests  

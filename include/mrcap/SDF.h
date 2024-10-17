@@ -5,9 +5,9 @@
 
 // namespace plt = matplotlibcpp;
 struct obstacle {
-    double x;
-    double y;
-    double w; // weight
+    float x;
+    float y;
+    float w; // weight
     obstacle() : x(0), y(0), w(0) {}
     obstacle(double x_val, double y_val, double w_val) : x(x_val), y(y_val), w(w_val) {}
 };
