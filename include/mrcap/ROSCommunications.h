@@ -32,6 +32,8 @@ class RefTrajectoryPublisher : public rclcpp::Node {
   RefTrajectoryPublisher(const CentroidData& centroid, const bool is_simulation)
     : Node("ref_trajectory_publisher"), centroid_(centroid)
   {
+    ref_trajectory_pub_ = this->create_publisher<nav_msgs::msg::Path>("ref_traj", 10);
+
     if (is_simulation) {
         ref_trajectory_msg_.header.frame_id = "map"; // Change to your frame ID if needed
     } else {
